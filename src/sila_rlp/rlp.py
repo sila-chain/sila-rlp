@@ -1,5 +1,5 @@
 """
-Defines the serialization and deserialization format used throughout Ethereum.
+Defines the serialization and deserialization format used throughout Sila.
 """
 
 import collections.abc
@@ -28,8 +28,8 @@ from typing import (
     runtime_checkable,
 )
 
-from ethereum_types.bytes import Bytes, FixedBytes
-from ethereum_types.numeric import FixedUnsigned, Uint, Unsigned
+from sila_types.bytes import Bytes, FixedBytes
+from sila_types.numeric import FixedUnsigned, Uint, Unsigned
 
 from .exceptions import DecodingError, EncodingError
 
@@ -200,7 +200,7 @@ def deserialize_to(class_: object, value: Simple) -> Extended:
     Convert the already decoded `value` (see [`decode`]) into an object of type
     `class_`.
 
-    [`decode`]: ref:ethereum_rlp.rlp.decode
+    [`decode`]: ref:sila_rlp.rlp.decode
     """
     origin = get_origin(class_)
 

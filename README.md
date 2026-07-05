@@ -1,9 +1,9 @@
-Ethereum RLP
+Sila RLP
 ============
 
-Recursive-length prefix (RLP) serialization as used by the [Ethereum Execution Layer Specification (EELS)][eels].
+Recursive-length prefix (RLP) serialization as used by the [Sila Execution Layer Specification (EELS)][eels].
 
-[eels]: https://github.com/ethereum/execution-specs
+[eels]: https://github.com/sila-chain/execution-specs
 
 ## Usage
 
@@ -11,8 +11,8 @@ Here's a very basic example demonstrating how to define a schema, then encode/de
 
 ```python
 from dataclasses import dataclass
-from ethereum_rlp import encode, decode_to
-from ethereum_types.numeric import Uint
+from sila_rlp import encode, decode_to
+from sila_types.numeric import Uint
 from typing import List
 
 @dataclass

@@ -12,11 +12,11 @@ from typing import (
 )
 
 import pytest
-from ethereum_types.bytes import Bytes, Bytes1, Bytes4, Bytes32
-from ethereum_types.numeric import U8, U256, Uint
+from sila_types.bytes import Bytes, Bytes1, Bytes4, Bytes32
+from sila_types.numeric import U8, U256, Uint
 
-from ethereum_rlp import Extended, rlp
-from ethereum_rlp.exceptions import DecodingError, EncodingError
+from sila_rlp import Extended, rlp
+from sila_rlp.exceptions import DecodingError, EncodingError
 
 #
 # Tests for RLP encode
@@ -334,10 +334,10 @@ def test_decode_to__int() -> None:
 
 
 def test_decode_to__uint_enum() -> None:
-    ethereum_types_enum = pytest.importorskip("ethereum_types.enum")
+    sila_types_enum = pytest.importorskip("sila_types.enum")
 
     class MyUintEnum(
-        ethereum_types_enum.UintEnum  # type: ignore[name-defined]
+        sila_types_enum.UintEnum  # type: ignore[name-defined]
     ):
         RED = Uint(0)
         BLUE = Uint(1)
@@ -352,12 +352,12 @@ def test_decode_to__uint_enum() -> None:
 
 
 def test_decode_to__uint_flag() -> None:
-    ethereum_types_enum = pytest.importorskip("ethereum_types.enum")
-    if not hasattr(ethereum_types_enum, "UintFlag"):
+    sila_types_enum = pytest.importorskip("sila_types.enum")
+    if not hasattr(sila_types_enum, "UintFlag"):
         pytest.skip("no UintFlag class")
 
     class MyUintFlag(
-        ethereum_types_enum.UintFlag  # type: ignore[name-defined]
+        sila_types_enum.UintFlag  # type: ignore[name-defined]
     ):
         RED = Uint(1)
         BLUE = Uint(2)
@@ -373,12 +373,12 @@ def test_decode_to__uint_flag() -> None:
 
 
 def test_decode_to__uint_flag_keep() -> None:
-    ethereum_types_enum = pytest.importorskip("ethereum_types.enum")
-    if not hasattr(ethereum_types_enum, "UintFlag"):
+    sila_types_enum = pytest.importorskip("sila_types.enum")
+    if not hasattr(sila_types_enum, "UintFlag"):
         pytest.skip("no UintFlag class")
 
     class MyUintFlag(
-        ethereum_types_enum.UintFlag  # type: ignore[name-defined]
+        sila_types_enum.UintFlag  # type: ignore[name-defined]
     ):
         RED = Uint(1)
         BLUE = Uint(2)
@@ -395,14 +395,14 @@ def test_decode_to__uint_flag_keep() -> None:
 
 
 def test_decode_to__uint_flag_conform() -> None:
-    ethereum_types_enum = pytest.importorskip("ethereum_types.enum")
-    if not hasattr(ethereum_types_enum, "UintFlag"):
+    sila_types_enum = pytest.importorskip("sila_types.enum")
+    if not hasattr(sila_types_enum, "UintFlag"):
         pytest.skip("no UintFlag class")
 
     from enum import CONFORM
 
     class MyUintFlag(
-        ethereum_types_enum.UintFlag,  # type: ignore[name-defined]
+        sila_types_enum.UintFlag,  # type: ignore[name-defined]
         boundary=CONFORM,  # type: ignore[call-arg]
     ):
         RED = Uint(1)
@@ -419,14 +419,14 @@ def test_decode_to__uint_flag_conform() -> None:
 
 
 def test_decode_to__uint_flag_eject() -> None:
-    ethereum_types_enum = pytest.importorskip("ethereum_types.enum")
-    if not hasattr(ethereum_types_enum, "UintFlag"):
+    sila_types_enum = pytest.importorskip("sila_types.enum")
+    if not hasattr(sila_types_enum, "UintFlag"):
         pytest.skip("no UintFlag class")
 
     from enum import EJECT
 
     class MyUintFlag(
-        ethereum_types_enum.UintFlag,  # type: ignore[name-defined]
+        sila_types_enum.UintFlag,  # type: ignore[name-defined]
         boundary=EJECT,  # type: ignore[call-arg]
     ):
         RED = Uint(1)
@@ -445,14 +445,14 @@ def test_decode_to__uint_flag_eject() -> None:
 
 
 def test_decode_to__uint_flag_strict() -> None:
-    ethereum_types_enum = pytest.importorskip("ethereum_types.enum")
-    if not hasattr(ethereum_types_enum, "UintFlag"):
+    sila_types_enum = pytest.importorskip("sila_types.enum")
+    if not hasattr(sila_types_enum, "UintFlag"):
         pytest.skip("no UintFlag class")
 
     from enum import STRICT
 
     class MyUintFlag(
-        ethereum_types_enum.UintFlag,  # type: ignore[name-defined]
+        sila_types_enum.UintFlag,  # type: ignore[name-defined]
         boundary=STRICT,  # type: ignore[call-arg]
     ):
         RED = Uint(1)

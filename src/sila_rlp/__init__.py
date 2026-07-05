@@ -1,5 +1,5 @@
 """
-Defines the serialization and deserialization format used throughout Ethereum.
+Defines the serialization and deserialization format used throughout Sila.
 """
 
 from .rlp import (  # noqa: F401
