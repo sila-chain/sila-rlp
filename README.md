@@ -1,9 +1,9 @@
-Sila RLP
+Sila SILA_RLP
 ============
 
-Recursive-length prefix (RLP) serialization as used by the [Sila Execution Layer Specification (EELS)][eels].
+Recursive-length prefix (SILA_RLP) serialization as used by the [Sila Execution Layer Specification (EELS)][eels].
 
-[eels]: https://github.com/sila-chain/execution-specs
+[eels]: https://github.com/sila/execution-specs
 
 ## Usage
 

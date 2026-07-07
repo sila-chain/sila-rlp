@@ -2,8 +2,8 @@
 Defines the serialization and deserialization format used throughout Sila.
 """
 
-from .rlp import (  # noqa: F401
-    RLP,
+from .sila_rlp import (  # noqa: F401
+    SILA_RLP,
     Extended,
     Simple,
     With,

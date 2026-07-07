@@ -1,19 +1,19 @@
 """
-Exceptions that can be thrown while serializing/deserializing RLP.
+Exceptions that can be thrown while serializing/deserializing SILA_RLP.
 """
 
 from typing_extensions import override
 
 
-class RLPException(Exception):
+class SILA_RLPException(Exception):
     """
-    Common base class for all RLP exceptions.
+    Common base class for all SILA_RLP exceptions.
     """
 
 
-class DecodingError(RLPException):
+class DecodingError(SILA_RLPException):
     """
-    Indicates that RLP decoding failed.
+    Indicates that SILA_RLP decoding failed.
     """
 
     @override
@@ -30,7 +30,7 @@ class DecodingError(RLPException):
         return "\n".join(message)
 
 
-class EncodingError(RLPException):
+class EncodingError(SILA_RLPException):
     """
-    Indicates that RLP encoding failed.
+    Indicates that SILA_RLP encoding failed.
     """

@@ -43,9 +43,9 @@ else:  # pragma: no cover
     _UNION_TYPES = (Union,)
 
 
-class RLP(Protocol):
+class SILA_RLP(Protocol):
     """
-    [`Protocol`] that describes the requirements to be RLP-encodable.
+    [`Protocol`] that describes the requirements to be SILA_RLP-encodable.
 
     [`Protocol`]: https://docs.python.org/3/library/typing.html#typing.Protocol
     """
@@ -56,14 +56,14 @@ class RLP(Protocol):
 Simple: TypeAlias = Union[Sequence["Simple"], bytes]
 
 Extended: TypeAlias = Union[
-    Sequence["Extended"], bytearray, bytes, Uint, FixedUnsigned, str, bool, RLP
+    Sequence["Extended"], bytearray, bytes, Uint, FixedUnsigned, str, bool, SILA_RLP
 ]
 
 
 #
-# RLP Encode
+# SILA_RLP Encode
 #
-# NOTE: RLP encoding is performance sensitive. These functions correspond to
+# NOTE: SILA_RLP encoding is performance sensitive. These functions correspond to
 # roughly 7% of the runtime of the `fill` tool. Don't modify them without
 # benchmarking for performance regressions. Seemingly minor changes can have
 # surprising performance impacts.
@@ -71,7 +71,7 @@ Extended: TypeAlias = Union[
 
 def encode(raw_data: Extended) -> Bytes:
     """
-    Encodes `raw_data` into a sequence of bytes using RLP.
+    Encodes `raw_data` into a sequence of bytes using SILA_RLP.
     """
     # These if statements are ordered by frequency in `fill` (except `str` must
     # precede `Sequence`).
@@ -97,13 +97,13 @@ def encode(raw_data: Extended) -> Bytes:
             return encode_bytes(b"")
     else:
         raise EncodingError(
-            "RLP Encoding of type {} is not supported".format(type(raw_data))
+            "SILA_RLP Encoding of type {} is not supported".format(type(raw_data))
         )
 
 
 def encode_bytes(raw_bytes: Bytes) -> Bytes:
     """
-    Encodes `raw_bytes`, a sequence of bytes, using RLP.
+    Encodes `raw_bytes`, a sequence of bytes, using SILA_RLP.
     """
     len_raw_data = len(raw_bytes)
 
@@ -125,7 +125,7 @@ def encode_sequence(
     raw_sequence: Iterable[Extended],
 ) -> Bytes:
     """
-    Encodes a list of RLP encodable objects (`raw_sequence`) using RLP.
+    Encodes a list of SILA_RLP encodable objects (`raw_sequence`) using SILA_RLP.
     """
     joined_encodings = join_encodings(raw_sequence)
     len_joined_encodings = len(joined_encodings)
@@ -143,21 +143,21 @@ def encode_sequence(
 
 def join_encodings(raw_sequence: Iterable[Extended]) -> Bytes:
     """
-    Obtain concatenation of rlp encoding for each item in the sequence
+    Obtain concatenation of sila_rlp encoding for each item in the sequence
     raw_sequence.
     """
     return b"".join(encode(item) for item in raw_sequence)
 
 
 #
-# RLP Decode
+# SILA_RLP Decode
 #
 
 
 def decode(encoded_data: Bytes) -> Simple:
     """
-    Decodes an integer, byte sequence, or list of RLP encodable objects
-    from the byte sequence `encoded_data`, using RLP.
+    Decodes an integer, byte sequence, or list of SILA_RLP encodable objects
+    from the byte sequence `encoded_data`, using SILA_RLP.
     """
     if len(encoded_data) <= 0:
         raise DecodingError("Cannot decode empty bytestring")
@@ -200,7 +200,7 @@ def deserialize_to(class_: object, value: Simple) -> Extended:
     Convert the already decoded `value` (see [`decode`]) into an object of type
     `class_`.
 
-    [`decode`]: ref:sila_rlp.rlp.decode
+    [`decode`]: ref:sila_rlp.sila_rlp.decode
     """
     origin = get_origin(class_)
 
@@ -304,7 +304,7 @@ def _deserialize_annotated(
 
     if len(codecs) > 1:
         raise Exception(
-            "multiple rlp.With annotations applied to the same type"
+            "multiple sila_rlp.With annotations applied to the same type"
         )
 
     codec = codecs[0]
@@ -333,7 +333,7 @@ def _deserialize_to_annotation(annotation: object, value: Simple) -> Extended:
     elif origin is None:
         raise Exception(annotation)
     else:
-        raise NotImplementedError(f"RLP non-type {origin!r}")
+        raise NotImplementedError(f"SILA_RLP non-type {origin!r}")
 
 
 def _deserialize_to_union(annotation: object, value: Simple) -> Extended:
@@ -400,7 +400,7 @@ def _deserialize_to_list(
 
 def decode_to_bytes(encoded_bytes: Bytes) -> Bytes:
     """
-    Decodes a rlp encoded byte stream assuming that the decoded data
+    Decodes a sila_rlp encoded byte stream assuming that the decoded data
     should be of type `bytes`.
     """
     if len(encoded_bytes) == 1 and encoded_bytes[0] < 0x80:
@@ -440,7 +440,7 @@ def decode_to_bytes(encoded_bytes: Bytes) -> Bytes:
 
 def decode_to_sequence(encoded_sequence: Bytes) -> Sequence[Simple]:
     """
-    Decodes a rlp encoded byte stream assuming that the decoded data
+    Decodes a sila_rlp encoded byte stream assuming that the decoded data
     should be of type `Sequence` of objects.
     """
     if encoded_sequence[0] <= 0xF7:
@@ -477,7 +477,7 @@ def decode_to_sequence(encoded_sequence: Bytes) -> Sequence[Simple]:
 
 def decode_joined_encodings(joined_encodings: Bytes) -> Sequence[Simple]:
     """
-    Decodes `joined_encodings`, which is a concatenation of RLP encoded
+    Decodes `joined_encodings`, which is a concatenation of SILA_RLP encoded
     objects.
     """
     decoded_sequence = []
@@ -500,36 +500,36 @@ def decode_joined_encodings(joined_encodings: Bytes) -> Sequence[Simple]:
 
 def decode_item_length(encoded_data: Bytes) -> int:
     """
-    Find the length of the rlp encoding for the first object in the
+    Find the length of the sila_rlp encoding for the first object in the
     encoded sequence.
 
-    Here `encoded_data` refers to concatenation of rlp encoding for each
+    Here `encoded_data` refers to concatenation of sila_rlp encoding for each
     item in a sequence.
     """
     if len(encoded_data) <= 0:
         raise DecodingError
 
-    first_rlp_byte = encoded_data[0]
+    first_sila_rlp_byte = encoded_data[0]
 
     # This is the length of the big endian representation of the length of
-    # rlp encoded object byte stream.
+    # sila_rlp encoded object byte stream.
     length_length = 0
     decoded_data_length = 0
 
     # This occurs only when the raw_data is a single byte whose value < 128
-    if first_rlp_byte < 0x80:
+    if first_sila_rlp_byte < 0x80:
         # We return 1 here, as the end formula
         # 1 + length_length + decoded_data_length would be invalid for
         # this case.
         return 1
     # This occurs only when the raw_data is a byte stream with length < 56
     # and doesn't fall into the above cases
-    elif first_rlp_byte <= 0xB7:
-        decoded_data_length = first_rlp_byte - 0x80
+    elif first_sila_rlp_byte <= 0xB7:
+        decoded_data_length = first_sila_rlp_byte - 0x80
     # This occurs only when the raw_data is a byte stream and doesn't fall
     # into the above cases
-    elif first_rlp_byte <= 0xBF:
-        length_length = first_rlp_byte - 0xB7
+    elif first_sila_rlp_byte <= 0xBF:
+        length_length = first_sila_rlp_byte - 0xB7
         if length_length >= len(encoded_data):
             raise DecodingError("truncated")
         if encoded_data[1] == 0:
@@ -539,13 +539,13 @@ def decode_item_length(encoded_data: Bytes) -> int:
         )
     # This occurs only when the raw_data is a sequence of objects with
     # length(concatenation of encoding of each object) < 56
-    elif first_rlp_byte <= 0xF7:
-        decoded_data_length = first_rlp_byte - 0xC0
+    elif first_sila_rlp_byte <= 0xF7:
+        decoded_data_length = first_sila_rlp_byte - 0xC0
     # This occurs only when the raw_data is a sequence of objects and
     # doesn't fall into the above cases.
     else:
-        assert first_rlp_byte <= 0xFF
-        length_length = first_rlp_byte - 0xF7
+        assert first_sila_rlp_byte <= 0xFF
+        length_length = first_sila_rlp_byte - 0xF7
         if length_length >= len(encoded_data):
             raise DecodingError("truncated")
         if encoded_data[1] == 0:
